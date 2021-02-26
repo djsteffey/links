@@ -19,11 +19,11 @@ public class Util {
             switch (this){
                 case UP:{
                     gp.x = 0;
-                    gp.y = -1;
+                    gp.y = 1;
                 } break;
                 case DOWN:{
                     gp.x = 0;
-                    gp.y = 1;
+                    gp.y = -1;
                 } break;
                 case LEFT:{
                     gp.x = -1;
@@ -48,8 +48,19 @@ public class Util {
         return s_random.nextInt(range + 1) + min;
     }
 
+    public static float getRandomFloatInRange(float min, float max){
+        float range = max - min;
+        return (s_random.nextFloat() * range) + min;
+    }
+
     public static int tileDistance(int tile0_x, int tile0_y, int tile1_x, int tile1_y){
         return Math.abs(tile1_x - tile0_x) + Math.abs(tile1_y - tile0_y);
+    }
+
+    public static float lineDistance(float x1, float y1, float x2, float y2){
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        return (float)Math.sqrt(dx * dx + dy * dy);
     }
 
     public static long generateId(){

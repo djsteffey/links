@@ -18,7 +18,6 @@ public class TextProgressBar extends Group {
     private int m_max_value;
     private int m_current_value;
     private Label m_label;
-    private boolean m_text_enabled;
 
     // methods
     public TextProgressBar(AssetManager am, float width, float height) {
@@ -47,7 +46,6 @@ public class TextProgressBar extends Group {
         this.m_foreground.setScaleX(percent);
 
         // label
-        this.m_text_enabled = true;
         this.m_label = new Label(this.m_current_value + " / " + this.m_max_value, am.get("ui/skin.json", Skin.class), "small");
         this.m_label.setSize(this.getWidth(), this.getHeight());
         this.m_label.setAlignment(Align.center);

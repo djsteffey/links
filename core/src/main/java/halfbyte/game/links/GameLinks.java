@@ -56,6 +56,7 @@ public class GameLinks extends Game implements IGameServices{
 
 		// load some images
 		this.m_asset_manager.load("pixel.png", Texture.class);
+		this.m_asset_manager.load("blocks_eelhovercraft.png", Texture.class);
 
 		// load the ui skin
 		this.m_asset_manager.load("ui/skin.atlas", TextureAtlas.class);
@@ -69,12 +70,12 @@ public class GameLinks extends Game implements IGameServices{
 
 		// generate some ttf fonts
 		int sizes[] = { 24, 32, 48, 64, 96};
-		for (int i = 0; i < sizes.length; ++i){
+		for (int size : sizes) {
 			FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("ui/droid_serif_bold.ttf"));
 			FreeTypeFontGenerator.FreeTypeFontParameter parameters = new FreeTypeFontGenerator.FreeTypeFontParameter();
-			parameters.size = sizes[i];
+			parameters.size = size;
 			BitmapFont font = generator.generateFont(parameters);
-			skin.add("font-" + sizes[i], font);
+			skin.add("font-" + size, font);
 		}
 
 		// set default fonts to size 24 of this ttf
