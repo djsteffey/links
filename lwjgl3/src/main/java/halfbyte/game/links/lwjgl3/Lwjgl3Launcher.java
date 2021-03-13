@@ -13,7 +13,7 @@ public class Lwjgl3Launcher implements IPlatformServices {
 		configuration.setTitle("Links");
 		configuration.setWindowedMode(720 / 2, 1280 / 2);
 		configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
-		configuration.setWindowPosition(2200, 100);
+		configuration.setWindowPosition(600, 100);
 		configuration.setResizable(false);
 
 		// game
@@ -21,5 +21,17 @@ public class Lwjgl3Launcher implements IPlatformServices {
 
 		// run it
 		new Lwjgl3Application(game, configuration);
+	}
+
+	@Override
+	public void getShopItems(IGetShopItemsListener listener) {
+		for (int i = 0; i < 5; ++i){
+			listener.onItem("Name " + i, "Description " + i, );
+		}
+	}
+
+	@Override
+	public void purchaseShopItem(Object context, IPurchaseShopItemListener listener) {
+
 	}
 }

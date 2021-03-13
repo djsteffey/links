@@ -10,6 +10,7 @@ public abstract class ScreenAbstract implements Screen {
     // variables
     protected IGameServices m_game_services;
     protected Stage m_stage;
+    protected ScreenAbstract m_sub_screen;
 
     // methods
     public ScreenAbstract(IGameServices game_services){
@@ -18,6 +19,16 @@ public abstract class ScreenAbstract implements Screen {
 
         // make the stage
         this.m_stage = new Stage(new FitViewport(Constants.RESOLUTION_WIDTH, Constants.RESOLUTION_HEIGHT));
+    }
+
+    protected void setSubScreen(ScreenAbstract screen){
+        this.m_sub_screen = screen;
+        this.m_sub_screen.show();
+    }
+
+    protected void clearSubScreen(){
+        this.m_sub_screen.hide();
+        this.m_sub_screen = null;
     }
 
     @Override
@@ -30,6 +41,9 @@ public abstract class ScreenAbstract implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.m_stage.act(delta);
         this.m_stage.draw();
+        if (this.m_sub_screen != null){
+            this.m_sub_screen.render(delta);
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package halfbyte.game.links;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.GridPoint2;
 import java.util.Random;
 
@@ -11,8 +12,8 @@ public class Util {
     // enums
     public enum EDirection{
         UP, DOWN, LEFT, RIGHT, NONE;
-        public static EDirection getRandom(){
-            return EDirection.values()[Util.getRandomIntInRange(0, EDirection.values().length - 1)];
+        public static EDirection getRandom(Random rand){
+            return EDirection.values()[Util.getRandomIntInRange(rand, 0, EDirection.values().length - 1)];
         }
         public GridPoint2 toGridPoint2(){
             GridPoint2 gp = new GridPoint2(0, 0);
@@ -43,14 +44,23 @@ public class Util {
     }
 
     // misc
-    public static int getRandomIntInRange(int min, int max){
+    public static int getRandomIntInRange(Random rand, int min, int max){
         int range = max - min;
-        return s_random.nextInt(range + 1) + min;
+        return rand.nextInt(range + 1) + min;
     }
 
-    public static float getRandomFloatInRange(float min, float max){
+    public static float getRandomFloatInRange(Random rand, float min, float max){
         float range = max - min;
-        return (s_random.nextFloat() * range) + min;
+        return (rand.nextFloat() * range) + min;
+    }
+
+    public static Color getRandomColor(){
+        return new Color(
+                Util.getRandomFloatInRange(s_random, 0.0f, 1.0f),
+                Util.getRandomFloatInRange(s_random, 0.0f, 1.0f),
+                Util.getRandomFloatInRange(s_random, 0.0f, 1.0f),
+                1.0f
+        );
     }
 
     public static int tileDistance(int tile0_x, int tile0_y, int tile1_x, int tile1_y){

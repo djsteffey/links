@@ -1,65 +1,62 @@
 package halfbyte.game.links.board;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import halfbyte.game.links.Constants;
 import halfbyte.game.links.Util;
-import halfbyte.game.links.tileset.TilesetForBlock;
 
 public class Block extends Group {
     public enum EType{
-        RED, GREEN, BLUE, YELLOW, ORANGE, PURPLE;
-        public static EType getRandom(){
-            return EType.values()[Util.getRandomIntInRange(0, EType.values().length - 1)];
+        BLACK, BLUE, GREEN, GREY, PINK, RED, YELLOW, NONE;
+        public static EType getRandom(Random rand){
+            return EType.values()[Util.getRandomIntInRange(rand, 0, EType.values().length - 2)];
         }
-        public int toTilesetIndex(){
-            int index = -1;
+        public String getGraphicFilename(){
+            String s = "";
             switch (this){
-                case RED: index = 0; break;
-                case GREEN: index = 1; break;
-                case BLUE: index = 2; break;
-                case YELLOW: index = 3; break;
-                case ORANGE: index = 4; break;
-                case PURPLE: index = 5; break;
+                case BLACK: s = "blocks/tileBlack_01.png"; break;
+                case BLUE: s = "blocks/tileBlue_01.png"; break;
+                case GREEN: s = "blocks/tileGreen_01.png"; break;
+                case GREY: s = "blocks/tileGrey_01.png"; break;
+                case PINK: s = "blocks/tilePink_01.png"; break;
+                case RED: s = "blocks/tileRed_01.png"; break;
+                case YELLOW: s = "blocks/tileYellow_01.png"; break;
             }
-            return index;
-        }
-        public int toTilesetIndex2(){
-            int index = this.toTilesetIndex();
-            return 4 * 8 + index;
+            return s;
         }
     }
 
     // variables
     private EType m_type;
-    private TextureRegionDrawable m_normal_face;
-    private TextureRegionDrawable m_alternate_face;
     private Image m_image;
     private List<BlockLink> m_links;
-    private int m_tile_x;
-    private int m_tile_y;
+    private int m_current_tile_x;
+    private int m_current_tile_y;
+    private int m_original_tile_x;
+    private int m_original_tile_y;
 
     // methods
-    public Block(EType type, TilesetForBlock tileset, int tile_x, int tile_y){
+    public Block(EType type, AssetManager am, int tile_x, int tile_y){
         // save
         this.m_type = type;
-        this.m_tile_x = tile_x;
-        this.m_tile_y = tile_y;
+        this.m_current_tile_x = tile_x;
+        this.m_current_tile_y = tile_y;
 
         // size
         this.setSize(Constants.TILE_SIZE, Constants.TILE_SIZE);
 
         // position
-        this.setPosition(this.m_tile_x * Constants.TILE_SIZE, this.m_tile_y * Constants.TILE_SIZE);
+        this.setPosition(this.m_current_tile_x * Constants.TILE_SIZE, this.m_current_tile_y * Constants.TILE_SIZE);
 
         // image
-        this.m_normal_face = new TextureRegionDrawable(tileset.getTilesetTileByIndex(this.m_type.toTilesetIndex()).getTextureRegion());
-        this.m_alternate_face = new TextureRegionDrawable(tileset.getTilesetTileByIndex(this.m_type.toTilesetIndex2()).getTextureRegion());
-        this.m_image = new Image(this.m_normal_face);
+        this.m_image = new Image(am.get(this.m_type.getGraphicFilename(), Texture.class));
         this.m_image.setSize(this.getWidth(), this.getHeight());
         this.addActor(this.m_image);
 
@@ -67,13 +64,15 @@ public class Block extends Group {
         this.m_links = new ArrayList<>();
     }
 
-    public void setAlternateFace(boolean alternate){
-        if (alternate){
-            this.m_image.setDrawable(this.m_alternate_face);
-        }
-        else{
-            this.m_image.setDrawable(this.m_normal_face);
-        }
+    public void setCurrentAsOriginal(){
+        this.m_original_tile_x = this.m_current_tile_x;
+        this.m_original_tile_y = this.m_current_tile_y;
+    }
+
+    public void restoreToOriginal(){
+        this.m_current_tile_x = this.m_original_tile_x;
+        this.m_current_tile_y = this.m_original_tile_y;
+        this.setPosition(this.m_current_tile_x * Constants.TILE_SIZE, this.m_current_tile_y * Constants.TILE_SIZE);
     }
 
     @Override
@@ -84,20 +83,24 @@ public class Block extends Group {
         return null;
     }
 
+    public EType getType(){
+        return this.m_type;
+    }
+
     public List<BlockLink> getLinks(){
         return this.m_links;
     }
 
-    public int getTileX(){
-        return this.m_tile_x;
+    public int getCurrentTileX(){
+        return this.m_current_tile_x;
     }
 
-    public int getTileY(){
-        return this.m_tile_y;
+    public int getCurrentTileY(){
+        return this.m_current_tile_y;
     }
 
-    public void setTile(int tile_x, int tile_y){
-        this.m_tile_x = tile_x;
-        this.m_tile_y = tile_y;
+    public void setCurrentTile(int tile_x, int tile_y){
+        this.m_current_tile_x = tile_x;
+        this.m_current_tile_y = tile_y;
     }
 }
